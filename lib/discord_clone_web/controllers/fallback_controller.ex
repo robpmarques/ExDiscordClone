@@ -11,7 +11,7 @@ defmodule DiscordCloneWeb.FallbackController do
     |> render("error.json", %{message: message})
   end
 
-  def call(conn, %Ecto.Changeset{} = changeset) do
+  def call(conn, {:error, %Ecto.Changeset{} = changeset}) do
     conn
     |> put_status(:bad_request)
     |> put_view(ErrorView)

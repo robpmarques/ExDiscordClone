@@ -5,30 +5,17 @@ defmodule DiscordCloneWeb.UsersControllerTest do
     test "creates a user with valid attrs", %{conn: conn} do
       user = string_params_for(:user)
 
-      %{"id" => id} =
-        conn
-        |> post(Routes.users_path(conn, :create), user)
-        |> json_response(201)
+      conn
+      |> post(Routes.users_path(conn, :create), user)
+      |> json_response(201)
     end
 
-    test "redirects to show when data is valid", %{conn: conn} do
-      user = string_params_for(:user)
+    test "does not create the user with invalid attrs", %{conn: conn} do
+      user = string_params_for(:user, name: nil)
 
-      %{"id" => id} =
-        conn
-        |> post(Routes.users_path(conn, :create), user)
-        |> json_response(201)
-
-      data =
-        conn
-        |> get(Routes.users_path(conn, :show, id))
-        |> json_response(200)
-
-      assert %{
-               "id" => ^id,
-               "name" => "Jane Smith",
-               "email" => "email-0@example.com",
-             } = data
+      conn
+      |> post(Routes.users_path(conn, :create), user)
+      |> json_response(400)
     end
   end
 
